@@ -12,10 +12,16 @@ const App = () => {
   const [newItemName, setNewItemName] = useState('')
   const [newCategory, setNewCategory] = useState('')
   const [newDescription, setNewDescription] = useState('')
-  const [newPrice, setNewPrice] = useState({})
+  const [newPrice, setNewPrice] = useState(0)
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
   const [soldOut, setSoldOut] = useState(false)
+  const [show, setShow] = useState(false)
+
+  const reveal = () => {
+    setShow(true)
+  }
+
 
   const handleNewItemName = (event) => {
     setNewItemName(event.target.value)
@@ -44,13 +50,12 @@ const App = () => {
   const newItemSubmit = (event) => {
     event.preventDefault()
     axios.post(`http://project-3-backend-ga.herokuapp.com/store`, {
-      name:newItemName,
+      itemName:newItemName,
       category:newCategory,
       description:newDescription,
       price:newPrice,
       image:newImage,
-      rating:newRating,
-      soldOut:false
+      rating:newRating
     }).then(() => {
       axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
@@ -83,7 +88,7 @@ const App = () => {
       price:newPrice,
       image:newImage,
       rating:newRating,
-      soldOut:false
+      soldOut:setSoldOut
     }).then(() => {
       axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
@@ -125,9 +130,11 @@ const App = () => {
           Name:{item.itemName}<br/>
           Category:{item.category}<br/>
           description:{item.description}<br/>
+          price:{item.price.$numberDecimal}<br/>
           image:<img src={item.image}/><br/>
           rating:{item.rating}<br/>
-          Availability:{item.soldOut}<br/>
+          {item.soldOut}
+          {show ? <p>The item is available</p> : <p>The item is sold out</p>}
           </li>
         )
       })}
