@@ -145,7 +145,7 @@ const App = () => {
       </div>
       <div className="form-box">
         <form onSubmit={newItemSubmit}>
-          <div className="form-name">Name:<textarea type="text" rows="1" cols="100" onChange={handleNewItemName} required/><br/></div>
+          <div className="form-name">Name:<textarea type="text" rows="1" cols="60" onChange={handleNewItemName} required/><br/></div>
           <div className="form-category">Category:
               <select name="category" onChange={handleNewCategory} required>
                 <option value="">category</option>
@@ -155,11 +155,11 @@ const App = () => {
                 <option value="food">Food</option>
               </select><br/>
           </div>
-          <div className="form-description">Description: <textarea rows="2" cols="100" type="text" onChange={handleNewDescription} required/><br/>
+          <div className="form-description">Description: <textarea rows="2" cols="60" type="text" onChange={handleNewDescription} required/><br/>
           </div>
-          <div className="form-price">Price: <textarea rows="1" cols="100" type="text" onChange={handleNewPrice} required/><br/>
+          <div className="form-price">Price: <textarea rows="1" cols="60" type="text" onChange={handleNewPrice} required/><br/>
           </div>
-          <div className="form-image">Image:<textarea rows="1" cols="100" type="url" onChange={handleNewImage}/><br/>
+          <div className="form-image">Image:<textarea rows="1" cols="60" type="url" onChange={handleNewImage}/><br/>
           </div>
           <div className="form-rating">Rating:
             <select name="rating" onChange={handleNewRating} required>
@@ -186,12 +186,46 @@ const App = () => {
                 Category: {item.category}<br/>
                 Description: {item.description}<br/>
                 Price: ${item.price.$numberDecimal}<br/>
-                Image: {item.image == "" ? null : <img src={item.image}/>}<br/>
+                {item.image == "" ? null : <img src={item.image}/>}<br/>
                 Rating: {item.rating}<br/>
                 {item.soldOut ? <p>The item is out of stock<i className="fa-regular fa-circle-xmark"></i> </p> : <p>This item is in stock<i className="fa-solid fa-square-check"></i></p>}
                 <button onClick={(event) => {
                   deleteItem(item)
-                }}>Delete this item!</button>
+                }}>Delete this item!</button><br/>
+                <form onSubmit={(event) => {
+                  updateItem(item)
+                }}>
+                  <div className="edit-name">Name:<textarea type="text" rows="1" cols="30" onChange={handleNewItemName} required/><br/></div>
+                  <div className="edit-category">Category:
+                    <select name="category" onChange={handleNewCategory} required>
+                      <option value="">category</option>
+                      <option value="sports">Sports</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="clothes">Clothes</option>
+                      <option value="food">Food</option>
+                    </select><br/>
+                  </div>
+                  <div className="edit-description">Description: <textarea rows="2" cols="40" type="text" onChange={handleNewDescription} required/><br/>
+                  </div>
+                  <div className="edit-price">Price: <textarea rows="1" cols="30" type="text" onChange={handleNewPrice} required/><br/>
+                  </div>
+                  <div className="edit-image">Image:<textarea rows="1" cols="30" type="url" onChange={handleNewImage}/><br/>
+                  </div>
+                  <div className="edit-rating">Rating:
+                    <select name="rating" onChange={handleNewRating} required>
+                      <option value=''>Select rating</option>
+                      <option value='1'>1</option>
+                      <option value='2'>2</option>
+                      <option value='3'>3</option>
+                      <option value='4'>4</option>
+                      <option value='5'>5</option>
+                    </select><br/>
+                  </div>
+                  <div className="edit-availability">Out of stock: <input type="checkbox"   onChange={handleSoldOut}/><br/>
+                  </div>
+                  <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                  </div>
+                </form>
               </li>
           )
         })}

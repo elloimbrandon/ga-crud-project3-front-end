@@ -27,9 +27,11 @@ body::-webkit-scrollbar-thumb {
   width:100vw;
   padding:0;
   margin:0;
-  background:url('https://png.pngtree.com/thumb_back/fw800/background/20201224/pngtree-metal-christmas-shopping-cart-calendar-image_513983.jpg');
+  background:#0E4C52;
   background-repeat: no-repeat;
   background-size: cover;
+  overflow-y: auto;
+  padding-bottom: 10px;
 }
 
 .top-container{
@@ -37,36 +39,42 @@ body::-webkit-scrollbar-thumb {
   flex-direction: column;
   flex-wrap: wrap;
   width:100%;
-  height:20%;
+  height:40%;
+  /* gap:2em; */
   /* border: 1px solid black; */
 }
 .h1 {
   width:100%;
-  height:50%;
-  background: url('https://static.vecteezy.com/system/resources/thumbnails/003/240/364/small/shopping-online-on-phone-paper-art-modern-pink-background-gifts-box-free-vector.jpg');
-  background-repeat: no-repeat;
-  background-size:cover;
-  background-position: center;
+  height:20%;
+  background: #0E4C52;
   display:flex;
   justify-content: center;
   align-items: center;
   color: #05B5E0;
-  font-size: 50px;
+  text-shadow: 3px 3px 5px white, 5px 5px black;
+  font-size: 30px;
   text-align: center;
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
 }
+
 .nav{
   display:flex;
   flex-wrap: wrap;
   width:100%;
-  height:50%;
+  height:30%;
   padding:0;
   margin:0;
-  background: url('https://static.vecteezy.com/system/resources/previews/002/497/872/non_2x/online-shopping-store-with-mobile-application-digital-marketing-and-sale-banner-background-free-vector.jpg');
-  background-position: right(50%);
+  /* background: url('https://i.pinimg.com/originals/ec/b1/37/ecb1374551d411566d1595d1f0af8453.jpg'); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
+
 h2{
   display:none;
   font-size: 3em;
+  text-shadow: pink 5px 0 5px;
 }
 .nav-list {
   display: flex;
@@ -74,7 +82,7 @@ h2{
   justify-content: space-around;
   width:100%;
   list-style: none;
-  background: url('https://i.pinimg.com/originals/ec/b1/37/ecb1374551d411566d1595d1f0af8453.jpg');
+  background: #093236;
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -88,7 +96,7 @@ h2{
 .nav-list:hover{
   height:100%;
   filter: grayscale(0%) opacity(1);
-  color:black;
+  color:white;
 }
 .nav-list:hover h2{
   display:block;
@@ -96,7 +104,8 @@ h2{
 
 .nav-item{
   font-size: 50px;
-  color: black;
+  color: white;
+  padding-top: 10px;
 }
 
 .item-1, .item-2, .item-3, .item-4{
@@ -111,7 +120,7 @@ h2{
   cursor: pointer;
 }
 .nav-item-2:hover{
-  color:gray;
+  color:silver;
   cursor: pointer;
 }
 .nav-item-3:hover{
@@ -127,14 +136,14 @@ h2{
   display:flex;
   width:100%;
   height:15%;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   /* border:1px solid black; */
   padding:1em;
   flex-wrap: wrap;
   gap:2em;
-  /* margin-top:-200px; */
-  margin-top: 100px;
+  margin-top:-100px;
+  /* margin-top: 100px; */
   margin-bottom: 100px;
 }
 
@@ -145,7 +154,8 @@ h2{
   height:100%;
   justify-content: center;
   align-items: center;
-  font-size: 3em;
+  font-size: 2em;
+  text-shadow: 3px 3px 3px black, 3px 3px 3px white;
 }
 .text-box p {
   color: orange;
@@ -165,13 +175,13 @@ span {
   justify-content: center;
   animation: rotating-words 5s infinite;
   color:orange;
-  background:#13EFF5;
+  /* background:#13EFF5; */
 }
 .text-box-icon {
   padding-left: 20px;
-  color: #AC11FA;
+  color: orange;
   font-size: 100px;
-  animation: rotating-icon 1s infinite;
+  animation: rotating-icon 1500ms infinite;
 }
 .form-box{
   display: flex;
@@ -179,6 +189,8 @@ span {
   align-items: center;
   height:100%;
   width:40%;
+  text-shadow: 3px 3px 3px black, 3px 3px 3px white;
+  color: orange;
 }
 
 .form-name, .form-category, .form-description, .form-price, .form-image, .form-rating, .form-availability{
@@ -191,6 +203,14 @@ select {
   padding-right: 10px;
   margin-left: 20px;
   cursor: pointer;
+  color: orange;
+  background: #0E4C52;
+
+}
+
+select:hover {
+  background: white;
+  color:black;
 }
 
 
@@ -239,8 +259,8 @@ select {
 
 
 img {
-  width:200px;
-  height:200px;
+  width:100px;
+  height:100px;
 }
 
 .item-container{
@@ -251,9 +271,7 @@ img {
   list-style: none;
   width:100%;
   height:65%;
-  background: url('https://png.pngtree.com/background/20210716/original/pngtree-d-online-shopping-promotion-concept-with-smartphone-mockup-on-dark-background-picture-image_1389345.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: #0E4C52;
   margin-top: 50px;
   padding:50px;
 }
@@ -264,6 +282,12 @@ img {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  background: white;
-  padding:20px;
+  background: #115F66;
+  padding:10px;
+  width:25%;
+  height:55%;
+  box-shadow: 5px 5px 15px 5px black;
+  /* text-align: center; */
+  color:white;
+  text-shadow: 1px 1px 5px pink;
 }
