@@ -15,12 +15,8 @@ const App = () => {
   const [newPrice, setNewPrice] = useState(0)
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
-  const [soldOut, setSoldOut] = useState(false)
-  const [show, setShow] = useState(false)
+  const [newSoldOut, setNewSoldOut] = useState(false)
 
-  const reveal = () => {
-    setShow(true)
-  }
 
 
   const handleNewItemName = (event) => {
@@ -42,7 +38,7 @@ const App = () => {
     setNewRating(event.target.value)
   }
   const handleSoldOut = (event) => {
-    setSoldOut(event.target.checked)
+    setNewSoldOut(event.target.checked)
   }
 
 
@@ -55,7 +51,8 @@ const App = () => {
       description:newDescription,
       price:newPrice,
       image:newImage,
-      rating:newRating
+      rating:newRating,
+      soldOut:newSoldOut
     }).then(() => {
       axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
@@ -67,17 +64,25 @@ const App = () => {
   useEffect(() => {
     axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
       setStore(response.data)
-      console.log(response.data);
     })
   }, [])
 
+
   const deleteItem = (storeData) => {
-    axios.delet(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
+    axios.delete(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
       axios.get('http://https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
       })
     })
   }
+
+  useEffect(() => {
+    axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+      setStore(response.data)
+    })
+  },[deleteItem])
+
+
 
   const updateItem = (event, storeData) => {
     event.preventDefault()
@@ -88,7 +93,7 @@ const App = () => {
       price:newPrice,
       image:newImage,
       rating:newRating,
-      soldOut:setSoldOut
+      soldOut:newSoldOut
     }).then(() => {
       axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
@@ -98,48 +103,100 @@ const App = () => {
 
 
   return (
-    <>
-    <h1>Test Title by Ryan</h1>
-    <h2>Hello</h2>
-    <form onSubmit={newItemSubmit}>
-      Name:<input type="text" onChange={handleNewItemName} required/><br/>
-      Category: <select name="category" onChange={handleNewCategory} required>
-                  <option value="">category</option>
-                  <option value="sports">Sports</option>
-                  <option value="electronics">Electronics</option>
-                  <option value="clothes">Clothes</option>
-                  <option value="food">Food</option>
-                </select><br/>
-      Description: <input type="text" onChange={handleNewDescription} required/><br/>
-      Price: <input type="text" onChange={handleNewPrice} required/><br/>
-      Image:<input type="url" onChange={handleNewImage}/><br/>
-      Rating: <select name="rating" onChange={handleNewRating} required>
+    <div className="store-container">
+      <div className="top-container">
+        <div className="h1">
+        <h1>Welcome to Ibay, where shopping is a pleasure</h1>
+      </div>
+      <nav className="nav">
+        <ul className="nav-list">
+          <div className="item-1">
+            <li className="nav-item nav-item-1"><i className="fa-solid fa-basketball"></i></li><br/>
+            <h2>Sports</h2>
+          </div>
+          <div className="item-2">
+            <li className="nav-item nav-item-2"><i className="fa-solid fa-mobile-screen-button"></i></li><br/>
+            <h2>Electronics</h2>
+          </div>
+          <div className="item-3">
+            <li className="nav-item nav-item-3"><i className="fa-solid fa-shirt"></i></li><br/>
+            <h2>Clothes</h2>
+          </div>
+          <div className="item-4">
+            <li className="nav-item nav-item-4"><i className="fa-solid fa-burger"></i></li><br/>
+            <h2>Food</h2>
+          </div>
+        </ul>
+      </nav>
+    </div>
+    <div className="add-item">
+      <div className="text-box">
+        <p>Add </p>
+        <div className="text-box-text">
+          <span>Sport</span>
+          <span>Electronic</span>
+          <span>Clothing</span>
+          <span>Food</span>
+        </div>
+        <p>item!!</p>
+        <div className="text-box-icon">
+          <i className="fa-solid fa-angles-right"></i>
+        </div>
+      </div>
+      <div className="form-box">
+        <form onSubmit={newItemSubmit}>
+          <div className="form-name">Name:<textarea type="text" rows="1" cols="100" onChange={handleNewItemName} required/><br/></div>
+          <div className="form-category">Category:
+              <select name="category" onChange={handleNewCategory} required>
+                <option value="">category</option>
+                <option value="sports">Sports</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothes">Clothes</option>
+                <option value="food">Food</option>
+              </select><br/>
+          </div>
+          <div className="form-description">Description: <textarea rows="2" cols="100" type="text" onChange={handleNewDescription} required/><br/>
+          </div>
+          <div className="form-price">Price: <textarea rows="1" cols="100" type="text" onChange={handleNewPrice} required/><br/>
+          </div>
+          <div className="form-image">Image:<textarea rows="1" cols="100" type="url" onChange={handleNewImage}/><br/>
+          </div>
+          <div className="form-rating">Rating:
+            <select name="rating" onChange={handleNewRating} required>
+              <option value=''>Select rating</option>
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>
               <option value='4'>4</option>
               <option value='5'>5</option>
-              </select><br/>
-      Availability: <input type="checkbox" onChange={handleSoldOut}/><br/>
-      <input type="submit" value="Add Item to the Store"/>
-    </form>
-    <ul>
-      {store.map((item) => {
-        return (
-          <li key={item._id}>
-          Name:{item.itemName}<br/>
-          Category:{item.category}<br/>
-          description:{item.description}<br/>
-          price:{item.price.$numberDecimal}<br/>
-          image:<img src={item.image}/><br/>
-          rating:{item.rating}<br/>
-          {item.soldOut}
-          {show ? <p>The item is available</p> : <p>The item is sold out</p>}
-          </li>
-        )
-      })}
-    </ul>
-    </>
+            </select><br/>
+          </div>
+          <div className="form-availability">Out of stock: <input type="checkbox" onChange={handleSoldOut}/><br/>
+          </div>
+          <div className="form-submit"><input type="submit" value="Add Item to the Store"/>
+          </div>
+        </form>
+      </div>
+    </div>
+      <ul className="item-container">
+        {store.map((item) => {
+          return (
+              <li key={item._id} className="single-item">
+                Name: {item.itemName}<br/>
+                Category: {item.category}<br/>
+                Description: {item.description}<br/>
+                Price: ${item.price.$numberDecimal}<br/>
+                Image: {item.image == "" ? null : <img src={item.image}/>}<br/>
+                Rating: {item.rating}<br/>
+                {item.soldOut ? <p>The item is out of stock<i className="fa-regular fa-circle-xmark"></i> </p> : <p>This item is in stock<i className="fa-solid fa-square-check"></i></p>}
+                <button onClick={(event) => {
+                  deleteItem(item)
+                }}>Delete this item!</button>
+              </li>
+          )
+        })}
+      </ul>
+    </div>
   )
 
 }

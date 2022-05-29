@@ -1,38 +1,269 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+
+* {
+  font-family: 'Comfortaa', cursive;
+}
+
+body::-webkit-scrollbar {
+  width: 1em;
+}
+
+body::-webkit-scrollbar-track {
+  background: #F58271;
+}
+body::-webkit-scrollbar-thumb {
+  background: #BFD1FC;
+
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.store-container {
+  display:flex;
+  flex-wrap: wrap;
+  height:200vh;
+  width:100vw;
+  padding:0;
+  margin:0;
+  background:url('https://png.pngtree.com/thumb_back/fw800/background/20201224/pngtree-metal-christmas-shopping-cart-calendar-image_513983.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+.top-container{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  width:100%;
+  height:20%;
+  /* border: 1px solid black; */
+}
+.h1 {
+  width:100%;
+  height:50%;
+  background: url('https://static.vecteezy.com/system/resources/thumbnails/003/240/364/small/shopping-online-on-phone-paper-art-modern-pink-background-gifts-box-free-vector.jpg');
+  background-repeat: no-repeat;
+  background-size:cover;
+  background-position: center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  color: #05B5E0;
+  font-size: 50px;
+  text-align: center;
+}
+.nav{
+  display:flex;
+  flex-wrap: wrap;
+  width:100%;
+  height:50%;
+  padding:0;
+  margin:0;
+  background: url('https://static.vecteezy.com/system/resources/previews/002/497/872/non_2x/online-shopping-store-with-mobile-application-digital-marketing-and-sale-banner-background-free-vector.jpg');
+  background-position: right(50%);
+}
+h2{
+  display:none;
+  font-size: 3em;
+}
+.nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width:100%;
+  list-style: none;
+  background: url('https://i.pinimg.com/originals/ec/b1/37/ecb1374551d411566d1595d1f0af8453.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  align-items: center;
+  height:50%;
+  transition: 500ms ease;
+  filter: grayscale(100%) opacity(0.6);
+  margin-top: 0;
+  padding:10px;
+}
+.nav-list:hover{
+  height:100%;
+  filter: grayscale(0%) opacity(1);
+  color:black;
+}
+.nav-list:hover h2{
+  display:block;
+}
+
+.nav-item{
+  font-size: 50px;
+  color: black;
+}
+
+.item-1, .item-2, .item-3, .item-4{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.nav-item-1:hover{
+  color:orange;
+  cursor: pointer;
+}
+.nav-item-2:hover{
+  color:gray;
+  cursor: pointer;
+}
+.nav-item-3:hover{
+  color:blue;
+  cursor: pointer;
+}
+.nav-item-4:hover{
+  color:gold;
+  cursor: pointer;
+}
+
+.add-item {
+  display:flex;
+  width:100%;
+  height:15%;
+  justify-content: space-around;
+  align-items: center;
+  /* border:1px solid black; */
+  padding:1em;
+  flex-wrap: wrap;
+  gap:2em;
+  /* margin-top:-200px; */
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.text-box{
+  display:flex;
+  /* background:white; */
+  width:40%;
+  height:100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+}
+.text-box p {
+  color: orange;
+}
+.text-box-text{
+  display: flex;
+  flex-direction: column;
+  height:60px;
+  overflow: hidden;
+}
+span {
+  display: block;
+  display:flex;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  justify-content: center;
+  animation: rotating-words 5s infinite;
+  color:orange;
+  background:#13EFF5;
+}
+.text-box-icon {
+  padding-left: 20px;
+  color: #AC11FA;
+  font-size: 100px;
+  animation: rotating-icon 1s infinite;
+}
+.form-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:100%;
+  width:40%;
+}
+
+.form-name, .form-category, .form-description, .form-price, .form-image, .form-rating, .form-availability{
+  font-size: 2em;
+}
+
+select {
+  font-size: 0.7em;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+
+.form-submit input {
+  font-size: 1.5em;
+  border-radius: 20px;
+  background:crimson;
+  box-shadow: 2px 2px 2px 2px;
+  padding:10px;
+}
+.form-submit input:hover{
+  cursor: pointer;
+  background: green;
+  color: white;
+}
+
+@keyframes rotating-icon{
+  0%{
+    transform:translateX(0%);
+  }
+  100%{
+    transform:translateX(100%);
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+@keyframes rotating-words {
+  10% {
+    transform: translateY(-100%)
+  }
+  25% {
+    transform:translateY(-200%)
+  }
+  50% {
+    transform: translateY(-300%)
+  }
+  75% {
+    transform: translateY(-200%)
+  }
+  85%{
+    transform:translateY(-100%)
+  }
+  100% {
+    transform: translateY(0%)
+  }
+}
+
+
+img {
+  width:200px;
+  height:200px;
+}
+
+.item-container{
+  display:flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap:2em;
+  list-style: none;
+  width:100%;
+  height:65%;
+  background: url('https://png.pngtree.com/background/20210716/original/pngtree-d-online-shopping-promotion-concept-with-smartphone-mockup-on-dark-background-picture-image_1389345.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 50px;
+  padding:50px;
+}
+
+.single-item{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  flex-wrap: wrap;
+  background: white;
+  padding:20px;
 }
