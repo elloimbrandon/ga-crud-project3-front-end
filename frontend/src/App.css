@@ -2,6 +2,9 @@
 
 * {
   font-family: 'Comfortaa', cursive;
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
 }
 
 body::-webkit-scrollbar {
@@ -18,6 +21,15 @@ body::-webkit-scrollbar-thumb {
 
 .App {
   text-align: center;
+}
+
+.logo img {
+  width:100%;
+  height: 100%;
+}
+
+.logo:hover{
+  cursor: pointer;
 }
 
 .store-container {
@@ -214,12 +226,15 @@ select:hover {
 }
 
 
+
+
 .form-submit input {
   font-size: 1.5em;
   border-radius: 20px;
   background:crimson;
   box-shadow: 2px 2px 2px 2px;
   padding:10px;
+  overflow: hidden;
 }
 .form-submit input:hover{
   cursor: pointer;

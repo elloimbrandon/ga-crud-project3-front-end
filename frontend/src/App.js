@@ -4,6 +4,9 @@ import {useState, useEffect} from 'react'
 import axios from 'axios'
 
 
+// .filter(item => item.category == "electronics")
+
+
 
 
 const App = () => {
@@ -12,10 +15,46 @@ const App = () => {
   const [newItemName, setNewItemName] = useState('')
   const [newCategory, setNewCategory] = useState('')
   const [newDescription, setNewDescription] = useState('')
-  const [newPrice, setNewPrice] = useState(0)
+  const [newPrice, setNewPrice] = useState('')
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
   const [newSoldOut, setNewSoldOut] = useState(false)
+  const [filter, setFilter] = useState(false)
+  const [showSports, setShowSports] = useState(false)
+  const [showElectronics, setShowElectronics] = useState(false)
+  const [showClothes, setShowClothes] = useState(false)
+  const [showFood, setShowFood] = useState(false)
+  const [showHome, setShowHome] = useState(false)
+
+
+  const changeToSports = () => {
+    setShowSports(!showSports)
+    setShowHome(!showHome)
+
+  }
+  const changeToElectronics = () => {
+    setShowElectronics(!showElectronics)
+    setShowHome(!showHome)
+    setShowSports(!showSports)
+
+  }
+  const changeToClothes = () => {
+    setShowClothes(!showClothes)
+    setShowHome(!showHome)
+
+  }
+  const changeToFood = () => {
+    setShowFood(!showFood)
+    setShowHome(!showHome)
+
+  }
+
+  const changeToHome = () => {
+    setShowHome(!showHome)
+    setShowSports(showSports)
+  
+  }
+
 
 
 
@@ -58,29 +97,32 @@ const App = () => {
         setStore(response.data)
         console.log(response.data);
       })
+      setNewItemName('')
+      setNewCategory('')
+      setNewDescription('')
+      setNewPrice('')
+      setNewImage('')
+      setNewRating('')
+      setNewSoldOut(false)
     })
   }
 
+
+
   useEffect(() => {
     axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
-      setStore(response.data)
+        setStore(response.data)
     })
   }, [])
 
 
   const deleteItem = (storeData) => {
     axios.delete(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
-      axios.get('http://https://project-3-backend-ga.herokuapp.com/store').then((response) => {
+      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
       })
     })
   }
-
-  useEffect(() => {
-    axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
-      setStore(response.data)
-    })
-  },[deleteItem])
 
 
 
@@ -97,7 +139,15 @@ const App = () => {
     }).then(() => {
       axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
+        console.log(response.data);
       })
+      setNewItemName('')
+      setNewCategory('')
+      setNewDescription('')
+      setNewPrice('')
+      setNewImage('')
+      setNewRating('')
+      setNewSoldOut(false)
     })
   }
 
@@ -106,24 +156,25 @@ const App = () => {
     <div className="store-container">
       <div className="top-container">
         <div className="h1">
-        <h1>Welcome to Ibay, where shopping is a pleasure</h1>
-      </div>
+        <div className="logo"><img onClick={changeToHome} src="https://i.postimg.cc/vBNk5NTZ/d91ac1bf29314b43a07aefc109cfd43f.png"/></div>
+        <h1>Welcome to Ibay, where shopping is a pleasure!</h1>
+        </div>
       <nav className="nav">
         <ul className="nav-list">
           <div className="item-1">
-            <li className="nav-item nav-item-1"><i className="fa-solid fa-basketball"></i></li><br/>
+            <li className="nav-item nav-item-1"><i onClick={changeToSports} className="fa-solid fa-basketball"></i></li><br/>
             <h2>Sports</h2>
           </div>
           <div className="item-2">
-            <li className="nav-item nav-item-2"><i className="fa-solid fa-mobile-screen-button"></i></li><br/>
+            <li className="nav-item nav-item-2"><i onClick={changeToElectronics} className="fa-solid fa-mobile-screen-button"></i></li><br/>
             <h2>Electronics</h2>
           </div>
           <div className="item-3">
-            <li className="nav-item nav-item-3"><i className="fa-solid fa-shirt"></i></li><br/>
+            <li className="nav-item nav-item-3"><i onClick={changeToClothes} className="fa-solid fa-shirt"></i></li><br/>
             <h2>Clothes</h2>
           </div>
           <div className="item-4">
-            <li className="nav-item nav-item-4"><i className="fa-solid fa-burger"></i></li><br/>
+            <li className="nav-item nav-item-4"><i onClick={changeToFood} className="fa-solid fa-burger"></i></li><br/>
             <h2>Food</h2>
           </div>
         </ul>
@@ -131,7 +182,7 @@ const App = () => {
     </div>
     <div className="add-item">
       <div className="text-box">
-        <p>Add </p>
+        <p>Add</p>
         <div className="text-box-text">
           <span>Sport</span>
           <span>Electronic</span>
@@ -145,9 +196,9 @@ const App = () => {
       </div>
       <div className="form-box">
         <form onSubmit={newItemSubmit}>
-          <div className="form-name">Name:<textarea type="text" rows="1" cols="60" onChange={handleNewItemName} required/><br/></div>
+          <div className="form-name">Name:<input  type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
           <div className="form-category">Category:
-              <select name="category" onChange={handleNewCategory} required>
+              <select name="category" value={newCategory} onChange={handleNewCategory} required>
                 <option value="">category</option>
                 <option value="sports">Sports</option>
                 <option value="electronics">Electronics</option>
@@ -155,15 +206,15 @@ const App = () => {
                 <option value="food">Food</option>
               </select><br/>
           </div>
-          <div className="form-description">Description: <textarea rows="2" cols="60" type="text" onChange={handleNewDescription} required/><br/>
+          <div className="form-description">Description: <input type="text" value={newDescription} onChange={handleNewDescription} required/><br/>
           </div>
-          <div className="form-price">Price: <textarea rows="1" cols="60" type="text" onChange={handleNewPrice} required/><br/>
+          <div className="form-price">Price: <input type="text" value={newPrice} onChange={handleNewPrice} required/><br/>
           </div>
-          <div className="form-image">Image:<textarea rows="1" cols="60" type="url" onChange={handleNewImage}/><br/>
+          <div className="form-image">Image:<input type="url" value={newImage} onChange={handleNewImage}/><br/>
           </div>
           <div className="form-rating">Rating:
-            <select name="rating" onChange={handleNewRating} required>
-              <option value=''>Select rating</option>
+            <select name="rating" onChange={handleNewRating} value={newRating} required>
+              <option value={newRating}>Select rating</option>
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>
@@ -171,7 +222,7 @@ const App = () => {
               <option value='5'>5</option>
             </select><br/>
           </div>
-          <div className="form-availability">Out of stock: <input type="checkbox" onChange={handleSoldOut}/><br/>
+          <div className="form-availability">Out of stock: <input type="checkbox" checked={newSoldOut} onChange={handleSoldOut}/><br/>
           </div>
           <div className="form-submit"><input type="submit" value="Add Item to the Store"/>
           </div>
@@ -179,60 +230,329 @@ const App = () => {
       </div>
     </div>
       <ul className="item-container">
+
         {store.map((item) => {
-          return (
-              <li key={item._id} className="single-item">
-                Name: {item.itemName}<br/>
-                Category: {item.category}<br/>
-                Description: {item.description}<br/>
-                Price: ${item.price.$numberDecimal}<br/>
-                {item.image == "" ? null : <img src={item.image}/>}<br/>
-                Rating: {item.rating}<br/>
-                {item.soldOut ? <p>The item is out of stock<i className="fa-regular fa-circle-xmark"></i> </p> : <p>This item is in stock<i className="fa-solid fa-square-check"></i></p>}
-                <button onClick={(event) => {
-                  deleteItem(item)
-                }}>Delete this item!</button><br/>
-                <form onSubmit={(event) => {
-                  updateItem(item)
-                }}>
-                  <div className="edit-name">Name:<textarea type="text" rows="1" cols="30" onChange={handleNewItemName} required/><br/></div>
-                  <div className="edit-category">Category:
-                    <select name="category" onChange={handleNewCategory} required>
-                      <option value="">category</option>
-                      <option value="sports">Sports</option>
-                      <option value="electronics">Electronics</option>
-                      <option value="clothes">Clothes</option>
-                      <option value="food">Food</option>
-                    </select><br/>
-                  </div>
-                  <div className="edit-description">Description: <textarea rows="2" cols="40" type="text" onChange={handleNewDescription} required/><br/>
-                  </div>
-                  <div className="edit-price">Price: <textarea rows="1" cols="30" type="text" onChange={handleNewPrice} required/><br/>
-                  </div>
-                  <div className="edit-image">Image:<textarea rows="1" cols="30" type="url" onChange={handleNewImage}/><br/>
-                  </div>
-                  <div className="edit-rating">Rating:
-                    <select name="rating" onChange={handleNewRating} required>
-                      <option value=''>Select rating</option>
-                      <option value='1'>1</option>
-                      <option value='2'>2</option>
-                      <option value='3'>3</option>
-                      <option value='4'>4</option>
-                      <option value='5'>5</option>
-                    </select><br/>
-                  </div>
-                  <div className="edit-availability">Out of stock: <input type="checkbox"   onChange={handleSoldOut}/><br/>
-                  </div>
-                  <div className="edit-submit"><input type="submit" value="Edit Item"/>
-                  </div>
-                </form>
-              </li>
-          )
-        })}
-      </ul>
+
+        return (
+          <>
+          {showHome ? null : <li key={item._id} className="single-item">
+
+              Name: {item.itemName}<br/>
+              Category: {item.category}<br/>
+              <p>Description: {item.description}</p><br/>
+              Price: ${item.price.$numberDecimal}
+              {item.image == "" ? null : <img src={item.image}/>}<br/>
+              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+
+
+              <button onClick={(event) => {
+                deleteItem(item)
+              }}>Delete this item!</button><br/>
+
+
+              <form onSubmit={(event) => {
+                updateItem(event, item)
+              }}>
+                <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                <div className="edit-category">Category:
+                  <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                    <option value="">category</option>
+                    <option value="sports">Sports</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="food">Food</option>
+                  </select><br/>
+                </div>
+                <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                </div>
+                <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                </div>
+                <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                </div>
+                <div className="edit-rating">Rating:
+                  <select name="rating" onChange={handleNewRating} value={newRating} required>
+                    <option value=''>Select rating</option>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                  </select><br/>
+                </div>
+                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
+                </div>
+                <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                </div>
+              </form>
+            </li> }
+              </>
+            )
+          })}
+
+
+        {store.filter(item => item.category == "sports").map((item) =>
+        {
+        return (
+          <>
+            {showSports ?
+            <li key={item._id} className="single-item">
+              <button onClick={changeToSports}>Click</button>
+              Name: {item.itemName}<br/>
+              Category: {item.category}<br/>
+              <p>Description: {item.description}</p><br/>
+              Price: ${item.price.$numberDecimal}
+              {item.image == "" ? null : <img src={item.image}/>}<br/>
+              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+
+
+              <button onClick={(event) => {
+                deleteItem(item)
+              }}>Delete this item!</button><br/>
+
+
+              <form onSubmit={(event) => {
+                updateItem(event, item)
+              }}>
+                <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                <div className="edit-category">Category:
+                  <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                    <option value="">category</option>
+                    <option value="sports">Sports</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="food">Food</option>
+                  </select><br/>
+                </div>
+                <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                </div>
+                <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                </div>
+                <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                </div>
+                <div className="edit-rating">Rating:
+                  <select name="rating" onChange={handleNewRating} value={newRating} required>
+                    <option value=''>Select rating</option>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                  </select><br/>
+                </div>
+                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
+                </div>
+                <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                </div>
+              </form>
+            </li> : null }
+          </>
+            )
+          })}
+
+        {store.filter(item => item.category == "electronics").map((item) =>
+        {
+        return (
+          <>
+            {showElectronics ?
+            <li key={item._id} className="single-item">
+
+              Name: {item.itemName}<br/>
+              Category: {item.category}<br/>
+              <p>Description: {item.description}</p><br/>
+              Price: ${item.price.$numberDecimal}
+              {item.image == "" ? null : <img src={item.image}/>}<br/>
+              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+
+
+              <button onClick={(event) => {
+                deleteItem(item)
+              }}>Delete this item!</button><br/>
+
+
+              <form onSubmit={(event) => {
+                updateItem(event, item)
+              }}>
+                <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                <div className="edit-category">Category:
+                  <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                    <option value="">category</option>
+                    <option value="sports">Sports</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="food">Food</option>
+                  </select><br/>
+                </div>
+                <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                </div>
+                <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                </div>
+                <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                </div>
+                <div className="edit-rating">Rating:
+                  <select name="rating" onChange={handleNewRating} value={newRating} required>
+                    <option value=''>Select rating</option>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                  </select><br/>
+                </div>
+                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
+                </div>
+                <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                </div>
+              </form>
+            </li> : null }
+          </>
+            )
+          })}
+
+        {store.filter(item => item.category == "clothes").map((item) =>
+        {
+        return (
+          <>
+            {showClothes ?
+            <li key={item._id} className="single-item">
+
+              Name: {item.itemName}<br/>
+              Category: {item.category}<br/>
+              <p>Description: {item.description}</p><br/>
+              Price: ${item.price.$numberDecimal}
+              {item.image == "" ? null : <img src={item.image}/>}<br/>
+              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+
+
+              <button onClick={(event) => {
+                deleteItem(item)
+              }}>Delete this item!</button><br/>
+
+
+              <form onSubmit={(event) => {
+                updateItem(event, item)
+              }}>
+                <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                <div className="edit-category">Category:
+                  <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                    <option value="">category</option>
+                    <option value="sports">Sports</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="food">Food</option>
+                  </select><br/>
+                </div>
+                <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                </div>
+                <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                </div>
+                <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                </div>
+                <div className="edit-rating">Rating:
+                  <select name="rating" onChange={handleNewRating} value={newRating} required>
+                    <option value=''>Select rating</option>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                  </select><br/>
+                </div>
+                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
+                </div>
+                <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                </div>
+              </form>
+            </li> : null }
+          </>
+            )
+          })}
+
+        {store.filter(item => item.category == "food").map((item) =>
+        {
+        return (
+          <>
+            {showFood ?
+            <li key={item._id} className="single-item">
+
+              Name: {item.itemName}<br/>
+              Category: {item.category}<br/>
+              <p>Description: {item.description}</p><br/>
+              Price: ${item.price.$numberDecimal}
+              {item.image == "" ? null : <img src={item.image}/>}<br/>
+              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+
+
+              <button onClick={(event) => {
+                deleteItem(item)
+              }}>Delete this item!</button><br/>
+
+
+              <form onSubmit={(event) => {
+                updateItem(event, item)
+              }}>
+                <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                <div className="edit-category">Category:
+                  <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                    <option value="">category</option>
+                    <option value="sports">Sports</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothes">Clothes</option>
+                    <option value="food">Food</option>
+                  </select><br/>
+                </div>
+                <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                </div>
+                <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                </div>
+                <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                </div>
+                <div className="edit-rating">Rating:
+                  <select name="rating" onChange={handleNewRating} value={newRating} required>
+                    <option value=''>Select rating</option>
+                    <option value='1'>1</option>
+                    <option value='2'>2</option>
+                    <option value='3'>3</option>
+                    <option value='4'>4</option>
+                    <option value='5'>5</option>
+                  </select><br/>
+                </div>
+                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
+                </div>
+                <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                </div>
+              </form>
+            </li> : null }
+          </>
+            )
+          })}
+        </ul>
     </div>
   )
-
 }
 
 
