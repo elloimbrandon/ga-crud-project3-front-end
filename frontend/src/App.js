@@ -19,7 +19,7 @@ const App = () => {
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
   const [newSoldOut, setNewSoldOut] = useState(false)
-  const [filter, setFilter] = useState(false)
+  const [show, setShow] = useState(false)
   const [showSports, setShowSports] = useState(false)
   const [showElectronics, setShowElectronics] = useState(false)
   const [showClothes, setShowClothes] = useState(false)
@@ -28,34 +28,49 @@ const App = () => {
 
 
   const changeToSports = () => {
-    setShowSports(!showSports)
-    setShowHome(!showHome)
+    setShowSports(true)
+    setShowHome(true)
+    setShowElectronics(false)
+    setShowClothes(false)
+    setShowFood(false)
 
   }
+
   const changeToElectronics = () => {
-    setShowElectronics(!showElectronics)
-    setShowHome(!showHome)
-    setShowSports(!showSports)
-
+    setShowElectronics(true)
+    setShowHome(true)
+    setShowSports(false)
+    setShowClothes(false)
+    setShowFood(false)
   }
+
   const changeToClothes = () => {
-    setShowClothes(!showClothes)
-    setShowHome(!showHome)
-
+    setShowClothes(true)
+    setShowHome(true)
+    setShowSports(false)
+    setShowElectronics(false)
+    setShowFood(false)
   }
-  const changeToFood = () => {
-    setShowFood(!showFood)
-    setShowHome(!showHome)
 
+  const changeToFood = () => {
+    setShowFood(true)
+    setShowHome(true)
+    setShowSports(false)
+    setShowElectronics(false)
+    setShowClothes(false)
   }
 
   const changeToHome = () => {
-    setShowHome(!showHome)
-    setShowSports(showSports)
-  
+    setShowHome(false)
+    setShowSports(false)
+    setShowElectronics(false)
+    setShowClothes(false)
+    setShowFood(false)
   }
 
-
+  const reveal = () => {
+    setShow(!show)
+  }
 
 
   const handleNewItemName = (event) => {
@@ -255,7 +270,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              <form onSubmit={(event) => {
+            {show ?  <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -288,7 +303,8 @@ const App = () => {
                 </div>
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-              </form>
+                <button onClick={reveal}>Cancel Edit!</button>
+              </form> : <button onClick={reveal}>Click to edit!</button>}
             </li> }
               </>
             )
@@ -301,7 +317,7 @@ const App = () => {
           <>
             {showSports ?
             <li key={item._id} className="single-item">
-              <button onClick={changeToSports}>Click</button>
+
               Name: {item.itemName}<br/>
               Category: {item.category}<br/>
               <p>Description: {item.description}</p><br/>
@@ -320,7 +336,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              <form onSubmit={(event) => {
+              {show ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -353,7 +369,8 @@ const App = () => {
                 </div>
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-              </form>
+                <button onClick={reveal}>Cancel Edit!</button>
+              </form> : <button onClick={reveal}>Click to edit!</button>}
             </li> : null }
           </>
             )
@@ -384,7 +401,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              <form onSubmit={(event) => {
+              {show ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -417,7 +434,8 @@ const App = () => {
                 </div>
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-              </form>
+                <button onClick={reveal}>Cancel Edit!</button>
+              </form> : <button onClick={reveal}>Click to edit!</button> }
             </li> : null }
           </>
             )
@@ -448,7 +466,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              <form onSubmit={(event) => {
+              {show ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -481,7 +499,8 @@ const App = () => {
                 </div>
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-              </form>
+                <button onClick={reveal}>Cancel Edit!</button>
+              </form> : <button onClick={reveal}>Click to edit!</button>}
             </li> : null }
           </>
             )
@@ -512,7 +531,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              <form onSubmit={(event) => {
+              {show ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -545,7 +564,8 @@ const App = () => {
                 </div>
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-              </form>
+                <button onClick={reveal}>Cancel Edit!</button>
+              </form> : <button onClick={reveal}>Click to edit!</button>}
             </li> : null }
           </>
             )
