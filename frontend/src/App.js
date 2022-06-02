@@ -3,9 +3,6 @@ import './App.css';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 
-
-
-
 const App = () => {
 
   const [store, setStore] = useState([])
@@ -39,8 +36,6 @@ const App = () => {
     setSoldOut(event.target.checked)
   }
 
-
-
   const newItemSubmit = (event) => {
     event.preventDefault()
     axios.post(`http://project-3-backend-ga.herokuapp.com/store`, {
@@ -54,7 +49,7 @@ const App = () => {
     }).then(() => {
       axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
-        console.log(response.data);
+        // console.log(response.data);
       })
     })
   }
@@ -62,7 +57,7 @@ const App = () => {
   useEffect(() => {
     axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
       setStore(response.data)
-      console.log(response.data);
+      // console.log(response.data);
     })
   }, [])
 
@@ -91,11 +86,22 @@ const App = () => {
     })
   }
 
+  const showSearch = (event) => {
+    event.preventDefault()
+    axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+      setStore(response.data)
+    })
+  }
 
   return (
     <>
-    <h1>Test Title by Ryan</h1>
-    <h2>Hello</h2>
+    <h1>Store Name</h1>
+    <h2>Search</h2>
+    <form action="/" method="GET" onSubmit={showSearch}>
+      <input type="text" name="search" />
+      <input type="submit" value="search" />
+    </form>
+    <h2>Add a New Item</h2>
     <form onSubmit={newItemSubmit}>
       Name:<input type="text" onChange={handleNewItemName} required/><br/>
       Category: <select name="category" onChange={handleNewCategory} required>
