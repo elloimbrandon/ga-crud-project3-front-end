@@ -2,10 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
-
-
-// .filter(item => item.category == "electronics")
-
+import Login from './components/Login'
 
 
 
@@ -30,7 +27,12 @@ const App = () => {
 
   const [toggleInfo, setToggleInfo] = useState(false)
 
+  const [toggleLogin, setToggleLogin] = useState(true)
 
+
+  const handleToggleLogin = () => {
+    setToggleLogin(!toggleLogin)
+  }
 
 
 
@@ -197,7 +199,7 @@ const App = () => {
     }).then(() => {
       axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
-        console.log(response.data);
+        // console.log(response.data);
       })
       setNewItemName('')
       setNewCategory('')
@@ -238,9 +240,9 @@ const App = () => {
         </ul>
       </nav>
     </div>
-
+  {toggleLogin ? <><button onClick={handleToggleLogin}>Go Back</button><Login /></>:
     <div className="add-item">
-
+    <button onClick={handleToggleLogin}>Login</button>
       <div className="text-box">
         <p>Add</p>
         <div className="text-box-text">
@@ -287,7 +289,7 @@ const App = () => {
           </div>
         </form>
       </div>
-    </div>
+    </div> }
       <ul className="item-container">
 
         {store.map((item) => {
