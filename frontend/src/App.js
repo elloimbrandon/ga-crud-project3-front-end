@@ -185,38 +185,50 @@ const App = () => {
 
 
   const deleteItem = (storeData) => {
-    axios.delete(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
-      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
-        setStore(response.data)
+    let token = localStorage.getItem("token")
+    // console.log(token);
+    if (token) {
+      axios.delete(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
+        axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+          setStore(response.data)
+        })
       })
-    })
+    } else if (token == null) {
+      alert("Please log in!")
+    }
+
   }
 
 
 
   const updateItem = (event, storeData) => {
     event.preventDefault()
-    axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
-      itemName:newItemName,
-      category:newCategory,
-      description:newDescription,
-      price:newPrice,
-      image:newImage,
-      rating:newRating,
-      soldOut:false
-    }).then(() => {
-      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
-        setStore(response.data)
-        // console.log(response.data);
-      })
-      setNewItemName('')
-      setNewCategory('')
-      setNewDescription('')
-      setNewPrice('')
-      setNewImage('')
-      setNewRating('')
+    let token = localStorage.getItem("token")
+    if (token) {
+      axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
+        itemName:newItemName,
+        category:newCategory,
+        description:newDescription,
+        price:newPrice,
+        image:newImage,
+        rating:newRating,
+        soldOut:false
+      }).then(() => {
+        axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+          setStore(response.data)
+          // console.log(response.data);
+        })
+        setNewItemName('')
+        setNewCategory('')
+        setNewDescription('')
+        setNewPrice('')
+        setNewImage('')
+        setNewRating('')
 
-    })
+      })
+    } else if (token == null) {
+        alert("Please log in!")
+    }
   }
 
 
