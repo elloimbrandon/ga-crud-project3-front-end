@@ -7,6 +7,11 @@ const Cart = (props) => {
   const [email1, SetEmail1] = useState("");
   const email = "bfeltzcode@gmail.com";
   const password = "Sports123";
+
+
+
+
+
   useEffect(() => {
     // SetId();
   }, []);
@@ -41,17 +46,17 @@ const Cart = (props) => {
       })
       .then((response) => {
         console.log(response.data);
+
       });
   };
+
+
 
   return (
     <>
       <ul>
         <li>
           {props.name}
-          <button value={email} onClick={getEmail}>
-            get email
-          </button>
           <button value={props.id} onClick={addToCart}>
             Add to cart
           </button>

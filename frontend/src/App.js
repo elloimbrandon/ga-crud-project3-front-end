@@ -3,6 +3,7 @@ import './App.css';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import Login from './components/Login'
+import Cart from './components/Cart'
 
 
 
@@ -31,8 +32,15 @@ const App = () => {
 
 
   const handleToggleLogin = () => {
-    setToggleLogin(!toggleLogin)
+    let token = localStorage.getItem("token")
+    console.log(token);
+    if (token) {
+      setToggleLogin(!toggleLogin)
+    } else if (token == null) {
+      alert("Please log in!")
+    }
   }
+
 
 
 
@@ -212,7 +220,10 @@ const App = () => {
   }
 
 
+
   return (
+    <>
+
     <div className="store-container">
       <div className="top-container">
         <div className="h1">
@@ -240,9 +251,11 @@ const App = () => {
         </ul>
       </nav>
     </div>
-  {toggleLogin ? <><button onClick={handleToggleLogin}>Go Back</button><Login /></>:
+
+  {toggleLogin ? <><button onClick={handleToggleLogin}>Main</button><Login /></>:
     <div className="add-item">
     <button onClick={handleToggleLogin}>Login</button>
+
       <div className="text-box">
         <p>Add</p>
         <div className="text-box-text">
@@ -361,6 +374,7 @@ const App = () => {
                 <button onClick={(event) => {
                   handleSoldOut(event, item)
                 }}>Cancel Edit!</button>
+                <Cart />
               </form> : null}
             </li> }
               </>
@@ -641,6 +655,7 @@ const App = () => {
           })}
         </ul>
     </div>
+    </>
   )
 }
 

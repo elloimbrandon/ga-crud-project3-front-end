@@ -7,6 +7,22 @@ const Login = () => {
   const [user, setUser] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
+  const [login, setLogin] = useState(false)
+  const [hidden, setHidden] = useState(false)
+
+  const handleLogin = () => {
+    let token = localStorage.getItem("token")
+    console.log(token);
+    if (token) {
+      setLogin(!login)
+    } else if (token == null) {
+      alert("Please log in!")
+    }
+  }
+
+  const handleHidden = () => {
+    setHidden(!hidden)
+  }
 
   useEffect(() => {
     userRef.current.focus();
@@ -34,7 +50,9 @@ const Login = () => {
       .then((response) => {
         var token = localStorage.setItem("token", response.data.token);
         console.log(`logged in with ` + localStorage.getItem("token", token));
+
       });
+
   };
 
   const handleSignOut = async (e) => {
@@ -45,7 +63,8 @@ const Login = () => {
 
   return (
     <>
-      <section>
+    {login ? <p>Welcome!! <button onClick={handleLogin}>Back to Sign in!</button></p> :
+      <div><section>
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">Email:</label>
@@ -111,8 +130,10 @@ const Login = () => {
           />
           <button>Sign in</button>
         </form>
+        <button onClick={handleLogin}>Your page</button>
       </section>
-      <button onClick={handleSignOut}>Sign Out</button>
+      <button onClick={handleSignOut}>Sign Out</button></div>}
+
     </>
   );
 };
