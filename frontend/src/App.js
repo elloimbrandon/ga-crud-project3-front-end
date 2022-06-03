@@ -13,6 +13,7 @@ const App = () => {
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
   const [soldOut, setSoldOut] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleNewItemName = (event) => {
     setNewItemName(event.target.value)
@@ -48,7 +49,7 @@ const App = () => {
       soldOut:false
     }).then(() => {
       axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
-        setStore(response.data)
+        setStore([response.data])
         // console.log(response.data);
       })
     })
@@ -81,14 +82,32 @@ const App = () => {
       soldOut:false
     }).then(() => {
       axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
-        setStore(response.data)
+        setStore(response.query.search.result)
       })
     })
   }
 
   const showSearch = (event) => {
     event.preventDefault()
-    axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+    reseedStore()
+    axios.get('http://localhost:3000/store').then((response) => {
+      // setStore(response.data.query.search)
+      const list = response.data;
+      list.map((item) => {
+        if (item.itemName.toLowerCase() === searchQuery.toLowerCase()) {
+          setStore([item]);
+        }
+      })
+    })
+  }
+
+  const handleQuery = (event) => {
+    setSearchQuery(event.target.value)
+    console.log(searchQuery);
+  }
+
+  const reseedStore = () => {
+    axios.get('http://localhost:3000/store').then((response) => {
       setStore(response.data)
     })
   }
@@ -97,9 +116,9 @@ const App = () => {
     <>
     <h1>Store Name</h1>
     <h2>Search</h2>
-    <form action="/" method="GET" onSubmit={showSearch}>
-      <input type="text" name="search" />
-      <input type="submit" value="search" />
+    <form onSubmit={showSearch}>
+      <input type="text" onChange={handleQuery} />
+      <input type="submit" value="Search" />
     </form>
     <h2>Add a New Item</h2>
     <form onSubmit={newItemSubmit}>
