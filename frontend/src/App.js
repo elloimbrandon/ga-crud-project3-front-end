@@ -18,13 +18,57 @@ const App = () => {
   const [newPrice, setNewPrice] = useState('')
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
-  const [newSoldOut, setNewSoldOut] = useState(false)
+
   const [show, setShow] = useState(false)
   const [showSports, setShowSports] = useState(false)
   const [showElectronics, setShowElectronics] = useState(false)
   const [showClothes, setShowClothes] = useState(false)
   const [showFood, setShowFood] = useState(false)
   const [showHome, setShowHome] = useState(false)
+
+  const [newSoldOut, setNewSoldOut] = useState(false)
+
+  const [toggleInfo, setToggleInfo] = useState(false)
+
+
+
+
+
+  const handleSoldOut = (event, storeData) => {
+    event.preventDefault()
+    axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
+      itemName:storeData.itemName,
+      category:storeData.category,
+      description:storeData.description,
+      price:storeData.price.$numberDecimal,
+      image:storeData.image,
+      rating:storeData.rating,
+      soldOut:!storeData.soldOut
+    }).then(() => {
+      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+        setStore(response.data)
+      })
+    })
+  }
+
+  const handleToggleInfo = (event, storeData) => {
+    event.preventDefault()
+    axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
+      itemName:storeData.itemName,
+      category:storeData.category,
+      description:storeData.description,
+      price:storeData.price.$numberDecimal,
+      image:storeData.image,
+      rating:storeData.rating,
+      soldOut:!storeData.soldOut
+    }).then(() => {
+      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+        setStore(response.data)
+      })
+    })
+  }
+
+
 
 
   const changeToSports = () => {
@@ -91,9 +135,8 @@ const App = () => {
   const handleNewRating = (event) => {
     setNewRating(event.target.value)
   }
-  const handleSoldOut = (event) => {
-    setNewSoldOut(event.target.checked)
-  }
+
+
 
 
 
@@ -106,11 +149,11 @@ const App = () => {
       price:newPrice,
       image:newImage,
       rating:newRating,
-      soldOut:newSoldOut
+      soldOut:false
     }).then(() => {
       axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
-        console.log(response.data);
+        // console.log(response.data);
       })
       setNewItemName('')
       setNewCategory('')
@@ -118,7 +161,7 @@ const App = () => {
       setNewPrice('')
       setNewImage('')
       setNewRating('')
-      setNewSoldOut(false)
+
     })
   }
 
@@ -150,7 +193,7 @@ const App = () => {
       price:newPrice,
       image:newImage,
       rating:newRating,
-      soldOut:newSoldOut
+      soldOut:false
     }).then(() => {
       axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
@@ -162,7 +205,7 @@ const App = () => {
       setNewPrice('')
       setNewImage('')
       setNewRating('')
-      setNewSoldOut(false)
+
     })
   }
 
@@ -195,7 +238,9 @@ const App = () => {
         </ul>
       </nav>
     </div>
+
     <div className="add-item">
+
       <div className="text-box">
         <p>Add</p>
         <div className="text-box-text">
@@ -229,7 +274,7 @@ const App = () => {
           </div>
           <div className="form-rating">Rating:
             <select name="rating" onChange={handleNewRating} value={newRating} required>
-              <option value={newRating}>Select rating</option>
+              <option value=''>Select rating</option>
               <option value='1'>1</option>
               <option value='2'>2</option>
               <option value='3'>3</option>
@@ -237,8 +282,7 @@ const App = () => {
               <option value='5'>5</option>
             </select><br/>
           </div>
-          <div className="form-availability">Out of stock: <input type="checkbox" checked={newSoldOut} onChange={handleSoldOut}/><br/>
-          </div>
+
           <div className="form-submit"><input type="submit" value="Add Item to the Store"/>
           </div>
         </form>
@@ -250,19 +294,29 @@ const App = () => {
 
         return (
           <>
+
           {showHome ? null : <li key={item._id} className="single-item">
 
               Name: {item.itemName}<br/>
               Category: {item.category}<br/>
-              <p>Description: {item.description}</p><br/>
+
+              {item.soldOut ?
+
+                 <div><p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+               handleToggleInfo(event, item)
+             }}><i class="fa-solid fa-angles-up"></i></button></div>
+
+               : <button onClick={(event) => {
+                handleToggleInfo(event, item)
+              }}><i class="fa-solid fa-angles-down"></i></button> }
+
 
 
               <button onClick={(event) => {
@@ -270,7 +324,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-            {show ?  <form onSubmit={(event) => {
+            {item.soldOut ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -299,12 +353,13 @@ const App = () => {
                     <option value='5'>5</option>
                   </select><br/>
                 </div>
-                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
-                </div>
+
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-                <button onClick={reveal}>Cancel Edit!</button>
-              </form> : <button onClick={reveal}>Click to edit!</button>}
+                <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Cancel Edit!</button>
+              </form> : null}
             </li> }
               </>
             )
@@ -323,12 +378,12 @@ const App = () => {
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+
 
 
               <button onClick={(event) => {
@@ -336,7 +391,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              {show ? <form onSubmit={(event) => {
+              {item.soldOut ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -365,12 +420,15 @@ const App = () => {
                     <option value='5'>5</option>
                   </select><br/>
                 </div>
-                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
-                </div>
+
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-                <button onClick={reveal}>Cancel Edit!</button>
-              </form> : <button onClick={reveal}>Click to edit!</button>}
+                <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Cancel Edit!</button>
+              </form> : <button onClick={(event) => {
+                handleSoldOut(event, item)
+              }}>Edit Item</button>}
             </li> : null }
           </>
             )
@@ -388,12 +446,12 @@ const App = () => {
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+
 
 
               <button onClick={(event) => {
@@ -401,7 +459,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              {show ? <form onSubmit={(event) => {
+              {item.soldOut ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -430,12 +488,15 @@ const App = () => {
                     <option value='5'>5</option>
                   </select><br/>
                 </div>
-                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
-                </div>
+
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-                <button onClick={reveal}>Cancel Edit!</button>
-              </form> : <button onClick={reveal}>Click to edit!</button> }
+                <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Cancel Edit!</button>
+              </form> : <button onClick={(event) => {
+                handleSoldOut(event, item)
+              }}>Edit Item</button> }
             </li> : null }
           </>
             )
@@ -453,12 +514,12 @@ const App = () => {
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+
 
 
               <button onClick={(event) => {
@@ -466,7 +527,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              {show ? <form onSubmit={(event) => {
+              {item.soldOut ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -495,12 +556,15 @@ const App = () => {
                     <option value='5'>5</option>
                   </select><br/>
                 </div>
-                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
-                </div>
+
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-                <button onClick={reveal}>Cancel Edit!</button>
-              </form> : <button onClick={reveal}>Click to edit!</button>}
+                <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Cancel Edit!</button>
+              </form> : <button onClick={(event) => {
+                handleSoldOut(event, item)
+              }}>Edit Item</button>}
             </li> : null }
           </>
             )
@@ -518,12 +582,12 @@ const App = () => {
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i class="fa-solid fa-star"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.soldOut ? <p><i className="fa-regular fa-circle-xmark">Out of Stock</i> </p> : <p><i className="fa-solid fa-square-check">We have them!</i></p>}
+              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+
 
 
               <button onClick={(event) => {
@@ -531,7 +595,7 @@ const App = () => {
               }}>Delete this item!</button><br/>
 
 
-              {show ? <form onSubmit={(event) => {
+              {item.soldOut ? <form onSubmit={(event) => {
                 updateItem(event, item)
               }}>
                 <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
@@ -560,12 +624,15 @@ const App = () => {
                     <option value='5'>5</option>
                   </select><br/>
                 </div>
-                <div className="edit-availability">Out of stock: <input type="checkbox" checked={newSoldOut} value={newSoldOut} onChange={handleSoldOut}/><br/>
-                </div>
+
                 <div className="edit-submit"><input type="submit" value="Edit Item"/>
                 </div>
-                <button onClick={reveal}>Cancel Edit!</button>
-              </form> : <button onClick={reveal}>Click to edit!</button>}
+                <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Cancel Edit!</button>
+              </form> : <button onClick={(event) => {
+                handleSoldOut(event, item)
+              }}>Edit Item</button>}
             </li> : null }
           </>
             )
