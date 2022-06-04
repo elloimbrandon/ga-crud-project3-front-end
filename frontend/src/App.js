@@ -1,7 +1,8 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
+import React from 'react'
 
 // .filter(item => item.category == "electronics")
 
@@ -15,7 +16,7 @@ const App = () => {
   const [newImage, setNewImage] = useState('')
   const [newRating, setNewRating] = useState('')
 
-  const [show, setShow] = useState(false)
+  // const [show, setShow] = useState(false)
   const [showSports, setShowSports] = useState(false)
   const [showElectronics, setShowElectronics] = useState(false)
   const [showClothes, setShowClothes] = useState(false)
@@ -23,14 +24,11 @@ const App = () => {
   const [showHome, setShowHome] = useState(false)
 
   const [searchQuery, setSearchQuery] = useState('')
+  const [showSearchResult, setShowSearchResult] = useState(false)
 
-  const [newSoldOut, setNewSoldOut] = useState(false)
-
-  const [toggleInfo, setToggleInfo] = useState(false)
-
-
-
-
+  // const [newSoldOut, setNewSoldOut] = useState(false)
+  //
+  // const [toggleInfo, setToggleInfo] = useState(false)
 
   const handleSoldOut = (event, storeData) => {
     event.preventDefault()
@@ -66,15 +64,13 @@ const App = () => {
     })
   }
 
-
-
-
   const changeToSports = () => {
     setShowSports(true)
     setShowHome(true)
     setShowElectronics(false)
     setShowClothes(false)
     setShowFood(false)
+    setShowSearchResult(false)
   }
 
   const changeToElectronics = () => {
@@ -83,6 +79,7 @@ const App = () => {
     setShowSports(false)
     setShowClothes(false)
     setShowFood(false)
+    setShowSearchResult(false)
   }
 
   const changeToClothes = () => {
@@ -91,6 +88,7 @@ const App = () => {
     setShowSports(false)
     setShowElectronics(false)
     setShowFood(false)
+    setShowSearchResult(false)
   }
 
   const changeToFood = () => {
@@ -99,6 +97,7 @@ const App = () => {
     setShowSports(false)
     setShowElectronics(false)
     setShowClothes(false)
+    setShowSearchResult(false)
   }
 
   const changeToHome = () => {
@@ -107,11 +106,21 @@ const App = () => {
     setShowElectronics(false)
     setShowClothes(false)
     setShowFood(false)
+    setShowSearchResult(false)
   }
 
-  const reveal = () => {
-    setShow(!show)
+  const changeToSearch = () => {
+    setShowSearchResult(true)
+    setShowHome(true)
+    setShowSports(false)
+    setShowElectronics(false)
+    setShowClothes(false)
+    setShowFood(false)
   }
+
+  // const reveal = () => {
+  //   setShow(!show)
+  // }
 
   const handleNewItemName = (event) => {
     setNewItemName(event.target.value)
@@ -132,7 +141,9 @@ const App = () => {
     setNewRating(event.target.value)
   }
 
-
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value)
+  }
 
   const newItemSubmit = (event) => {
     event.preventDefault()
@@ -160,7 +171,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+    axios.get('http://localhost:3000/store').then((response) => {
       setStore(response.data)
     })
   }, [])
@@ -198,43 +209,34 @@ const App = () => {
     })
   }
 
-  const showSearch = (event) => {
-    event.preventDefault()
-    reseedStore()
-    axios.get('http://localhost:3000/store').then((response) => {
-      // setStore(response.data.query.search)
-      const list = response.data;
-      list.map((item) => {
-        if (item.itemName.toLowerCase() === searchQuery.toLowerCase()) {
-          setStore([item]);
-        }
-      })
-    })
-  }
-
-  const handleQuery = (event) => {
-    setSearchQuery(event.target.value)
-    console.log(searchQuery);
-  }
-
-  const reseedStore = () => {
-    axios.get('http://localhost:3000/store').then((response) => {
-      setStore(response.data)
-    })
-  }
+  // const showSearch = (event) => {
+  //   event.preventDefault()
+  //   reseedStore()
+  //   axios.get('http://localhost:3000/store').then((response) => {
+  //     // setStore(response.data.query.search)
+  //     const list = response.data;
+  //     list.map((item) => {
+  //       if (item.itemName.toLowerCase() === searchQuery.toLowerCase()) {
+  //         setStore([item]);
+  //         return (item.itemName)
+  //       }
+  //     })
+  //   })
+  // }
+  //
+  // const resetStore = () => {
+  //   axios.get('http://localhost:3000/store').then((response) => {
+  //     setStore(response.data)
+  //   })
+  // }
 
   return (
     <>
-    <h2>Search</h2>
-    <form onSubmit={showSearch}>
-      <input type="text" onChange={handleQuery} />
-      <input type="submit" value="Search" />
-    </form>
 
     <div className="store-container">
       <div className="top-container">
         <div className="h1">
-        <div className="logo"><img onClick={changeToHome} src="https://i.postimg.cc/vBNk5NTZ/d91ac1bf29314b43a07aefc109cfd43f.png"/></div>
+        <div className="logo"><img onClick={changeToHome} src="https://i.postimg.cc/vBNk5NTZ/d91ac1bf29314b43a07aefc109cfd43f.png" alt="" /></div>
         <h1>Welcome to Ibay, where shopping is a pleasure!</h1>
         </div>
       <nav className="nav">
@@ -260,7 +262,10 @@ const App = () => {
     </div>
 
     <div className="add-item">
-
+    <form onSubmit={changeToSearch}>
+      <input type="text" onChange={handleSearch} />
+      <input type="submit" value="Search" />
+    </form>
       <div className="text-box">
         <p>Add</p>
         <div className="text-box-text">
@@ -324,18 +329,18 @@ const App = () => {
 
                  <div><p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
-              {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+              {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+              {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
                handleToggleInfo(event, item)
-             }}><i class="fa-solid fa-angles-up"></i></button></div>
+             }}><i classNaame="fa-solid fa-angles-up"></i></button></div>
 
                : <button onClick={(event) => {
                 handleToggleInfo(event, item)
-              }}><i class="fa-solid fa-angles-down"></i></button> }
+              }}><i className="fa-solid fa-angles-down"></i></button> }
 
 
 
@@ -385,8 +390,75 @@ const App = () => {
             )
           })}
 
+          {store.filter(item => item.itemName === searchQuery).map((item) =>
+          {
+          return (
+            <>
+              {showSearchResult ?
+              <li key={item._id} className="single-item">
 
-        {store.filter(item => item.category == "sports").map((item) =>
+                Name: {item.itemName}<br/>
+                Category: {item.category}<br/>
+                <p>Description: {item.description}</p><br/>
+                Price: ${item.price.$numberDecimal}
+                {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+                {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+                {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+                {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+
+
+
+                <button onClick={(event) => {
+                  deleteItem(item)
+                }}>Delete this item!</button><br/>
+
+
+                {item.soldOut ? <form onSubmit={(event) => {
+                  updateItem(event, item)
+                }}>
+                  <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                  <div className="edit-category">Category:
+                    <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                      <option value="">category</option>
+                      <option value="sports">Sports</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="clothes">Clothes</option>
+                      <option value="food">Food</option>
+                    </select><br/>
+                  </div>
+                  <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                  </div>
+                  <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                  </div>
+                  <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                  </div>
+                  <div className="edit-rating">Rating:
+                    <select name="rating" onChange={handleNewRating} value={newRating} required>
+                      <option value=''>Select rating</option>
+                      <option value='1'>1</option>
+                      <option value='2'>2</option>
+                      <option value='3'>3</option>
+                      <option value='4'>4</option>
+                      <option value='5'>5</option>
+                    </select><br/>
+                  </div>
+
+                  <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                  </div>
+                  <button onClick={(event) => {
+                    handleSoldOut(event, item)
+                  }}>Cancel Edit!</button>
+                </form> : <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Edit Item</button>}
+              </li> : null }
+            </>
+              )
+            })}
+
+        {store.filter(item => item.category === "sports").map((item) =>
         {
         return (
           <>
@@ -397,12 +469,12 @@ const App = () => {
               Category: {item.category}<br/>
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
-              {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+              {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
 
 
 
@@ -454,7 +526,7 @@ const App = () => {
             )
           })}
 
-        {store.filter(item => item.category == "electronics").map((item) =>
+        {store.filter(item => item.category === "electronics").map((item) =>
         {
         return (
           <>
@@ -465,12 +537,12 @@ const App = () => {
               Category: {item.category}<br/>
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
-              {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+              {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
 
 
 
@@ -522,7 +594,7 @@ const App = () => {
             )
           })}
 
-        {store.filter(item => item.category == "clothes").map((item) =>
+        {store.filter(item => item.category === "clothes").map((item) =>
         {
         return (
           <>
@@ -533,12 +605,12 @@ const App = () => {
               Category: {item.category}<br/>
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
-              {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+              {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
 
 
 
@@ -590,7 +662,7 @@ const App = () => {
             )
           })}
 
-        {store.filter(item => item.category == "food").map((item) =>
+        {store.filter(item => item.category === "food").map((item) =>
         {
         return (
           <>
@@ -601,12 +673,12 @@ const App = () => {
               Category: {item.category}<br/>
               <p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
-              {item.image == "" ? null : <img src={item.image}/>}<br/>
-              {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
-              {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+              {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+              {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
 
 
 
@@ -657,6 +729,9 @@ const App = () => {
           </>
             )
           })}
+        </ul>
+      </div>
+    </>
   )
 }
 
