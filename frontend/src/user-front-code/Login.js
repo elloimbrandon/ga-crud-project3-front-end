@@ -1,43 +1,16 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 
-const Login = ({Email, userEmail}) => {
+const Login = () => {
   const userRef = useRef();
 
   const [user, setUser] = useState("");
-  // const [userEmail, setuserEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-  const [login, setLogin] = useState(false)
-  const [hidden, setHidden] = useState(false)
 
-  const handleLogin = () => {
-    let token = localStorage.getItem("token")
-    console.log(token);
-    if (token) {
-      setLogin(!login)
-    } else if (token == null) {
-      alert("Please log in!")
-    }
-  }
-
-  const handleNewEmail = (event) => {
-    Email(event.target.value)
-  }
-  const handleNewUser = (event) => {
-    setUser(event.target.value)
-  }
-  const handleNewPwd = (event) => {
-    setPwd(event.target.value)
-  }
-
-
-  const handleHidden = () => {
-    setHidden(!hidden)
-  }
-
-  // useEffect(() => {
-  //   userRef.current.focus();
-  // }, []);
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
 
   // prevents the page from reloading
   const handleSubmit = async (e) => {
@@ -45,7 +18,7 @@ const Login = ({Email, userEmail}) => {
     console.log(user, pwd);
     axios.post(`http://localhost:3000/users/register`, {
       name: user,
-      email: userEmail,
+      email: email,
       password: pwd,
     });
   };
@@ -55,47 +28,43 @@ const Login = ({Email, userEmail}) => {
     const url = "http://localhost:3000/users/login";
     axios
       .post(url, {
-        email: userEmail,
+        email: email,
         password: pwd,
       })
       .then((response) => {
         var token = localStorage.setItem("token", response.data.token);
         console.log(`logged in with ` + localStorage.getItem("token", token));
-
       });
-
   };
 
   const handleSignOut = async (e) => {
     e.preventDefault();
     console.log(`logged out`);
     localStorage.removeItem("token");
-    Email("")
   };
 
   return (
     <>
-    {login ? <p>Welcome!! {user}<button onClick={handleLogin}>Back to Sign in!</button></p> :
-      <div><section>
+      <section>
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="email">email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
             id="email"
-
+            ref={userRef}
             autoComplete="off"
             onChange={(e) => {
-              Email(e.target.value);
+              setEmail(e.target.value);
             }}
-            value={userEmail}
+            value={email}
             required
           />
           <label htmlFor="username">Username:</label>
           <input
             type="text"
             id="username"
-
+            ref={userRef}
             autoComplete="off"
             onChange={(e) => {
               setUser(e.target.value);
@@ -118,16 +87,16 @@ const Login = ({Email, userEmail}) => {
       </section>
       <section>
         <form onSubmit={handleSignIn}>
-          <label htmlFor="Email">Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             type="text"
-            id="userEmail"
-
+            id="email"
+            ref={userRef}
             autoComplete="off"
             onChange={(e) => {
-              Email(e.target.value);
+              setEmail(e.target.value);
             }}
-            value={userEmail}
+            value={email}
             required
           />
           <label htmlFor="password">Password:</label>
@@ -142,10 +111,8 @@ const Login = ({Email, userEmail}) => {
           />
           <button>Sign in</button>
         </form>
-        <button onClick={handleLogin}>Your page</button>
       </section>
-      <button onClick={handleSignOut}>Sign Out</button></div>}
-
+      <button onClick={handleSignOut}>Sign Out</button>
     </>
   );
 };

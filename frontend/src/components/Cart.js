@@ -5,9 +5,13 @@ const Cart = (props) => {
   // try getting email first as they're all unique
   const [id, SetId] = useState("");
   const [email1, SetEmail1] = useState("");
-  const email = "bfeltzcode@gmail.com";
-  const password = "Sports123";
+  const email = "panda@gmail.com";
+  const name = "panda";
+  const password = "12345678";
 
+  // const [email, setEmail] = useState('')
+  // const [name, setName] = useState('')
+  // const [password, setPassword] = useState('')
 
 
 
@@ -15,24 +19,6 @@ const Cart = (props) => {
   useEffect(() => {
     // SetId();
   }, []);
-
-  const getEmail = async (e) => {
-    e.preventDefault();
-    const url = "http://localhost:3000/users/email";
-    axios
-      .post(url, {
-        email: e.target.value,
-        password: password,
-      })
-      .then((response) => {
-        console.log(response.data.user);
-        SetEmail1(response.data.user.email);
-        console.log(email1);
-      });
-  };
-
-  // test to see if email was sent back
-  //   console.log(email);
 
   const addToCart = async (e) => {
     e.preventDefault();
@@ -43,6 +29,21 @@ const Cart = (props) => {
       .post(url, {
         email: email,
         cart: e.target.value,
+      })
+      .then((response) => {
+        console.log(response.data);
+      });
+    
+  };
+
+  const getMe = async (e) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    const url = "http://localhost:3000/users/me";
+    axios
+      .post(url, {
+        email: email,
+        name: name,
       })
       .then((response) => {
         console.log(response.data);
@@ -57,7 +58,8 @@ const Cart = (props) => {
       <ul>
         <li>
           {props.name}
-          <button value={props.id} onClick={addToCart}>
+          <button onClick={getMe}>get me</button>
+          <button value={props._id} onClick={addToCart}>
             Add to cart
           </button>
         </li>

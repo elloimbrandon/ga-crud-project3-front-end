@@ -34,6 +34,13 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [showSearchResult, setShowSearchResult] = useState(false)
 
+  const [itemObjectArray, setItemObjectArray] = useState("")
+
+  const [email, setEmail] = useState('')
+
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
+
 
   const handleToggleLogin = () => {
     let token = localStorage.getItem("token")
@@ -283,8 +290,8 @@ const App = () => {
         </ul>
       </nav>
     </div>
-
-  {toggleLogin ? <><button onClick={handleToggleLogin}>Main</button><Login /></>:
+  
+  {toggleLogin ? <><button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/></>:
     <div className="add-item">
     <form onSubmit={changeToSearch}>
       <input type="text" onChange={handleSearch} />
@@ -340,7 +347,7 @@ const App = () => {
       </div>
     </div> }
       <ul className="item-container">
-
+        <button>Get Info!</button>
         {store.map((item) => {
 
         return (
@@ -410,13 +417,13 @@ const App = () => {
                 <button onClick={(event) => {
                   handleSoldOut(event, item)
                 }}>Cancel Edit!</button>
-                <Cart />
+                <Cart {...item} />
               </form> : null}
             </li> }
               </>
             )
           })}
-        
+
           {store.filter(item => item.itemName == searchQuery.toLowerCase()).map((item) =>
           {
           return (

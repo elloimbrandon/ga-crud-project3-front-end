@@ -40,24 +40,18 @@ function App() {
   };
 
   return (
+    // testing
     <div className="App">
       {isAuth ? <button onClick={toggleAuth}> Profile</button> : <Login />}
       <>
         {itemObjectArray.map((item) => {
           return (
-            <div>
+            <div key={item.id}>
               <Cart {...item} />
             </div>
           );
         })}
       </>
-      {/* <Cart
-        itemObjectArrayName={itemObjectArray.name}
-        itemObjectArrayId={itemObjectArray.id}
-      /> */}
-      {/* <Login /> */}
-      {/* home page */}
-      {/* <Login /> */}
     </div>
   );
 }
