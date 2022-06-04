@@ -68,14 +68,21 @@ const Login = ({Email, userEmail}) => {
 
   const handleSignOut = async (e) => {
     e.preventDefault();
+
     console.log(`logged out`);
     localStorage.removeItem("token");
     Email("")
+
+      alert("You have signed out!")
+
+
   };
 
   return (
     <>
-    {login ? <p>Welcome!! {user}<button onClick={handleLogin}>Back to Sign in!</button></p> :
+    {login ? <div>Welcome!! {userEmail}<br/><button onClick={handleLogin}>Back to Sign in!</button><br/>
+
+    </div> :
       <div><section>
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>

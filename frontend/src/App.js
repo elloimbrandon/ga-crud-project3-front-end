@@ -41,6 +41,11 @@ const App = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
 
+  const [cart, setCart] = useState([])
+
+
+
+
 
   const handleToggleLogin = () => {
     let token = localStorage.getItem("token")
@@ -290,14 +295,17 @@ const App = () => {
         </ul>
       </nav>
     </div>
-  
-  {toggleLogin ? <><button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/></>:
+
+  {toggleLogin ? <>
+    <button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/>
+    
+  </>:
     <div className="add-item">
     <form onSubmit={changeToSearch}>
       <input type="text" onChange={handleSearch} />
       <input type="submit" value="Search" />
     </form>
-    <button onClick={handleToggleLogin}>Login</button>
+    <button onClick={handleToggleLogin}>Logout</button>
 
       <div className="text-box">
         <p>Add</p>
@@ -347,7 +355,6 @@ const App = () => {
       </div>
     </div> }
       <ul className="item-container">
-        <button>Get Info!</button>
         {store.map((item) => {
 
         return (
@@ -417,7 +424,7 @@ const App = () => {
                 <button onClick={(event) => {
                   handleSoldOut(event, item)
                 }}>Cancel Edit!</button>
-                <Cart {...item} />
+                <Cart cart={cart} Email={email} item={item} />
               </form> : null}
             </li> }
               </>
@@ -433,14 +440,22 @@ const App = () => {
 
                 Name: {item.itemName}<br/>
                 Category: {item.category}<br/>
-                <p>Description: {item.description}</p><br/>
+                {item.soldOut ?
+
+                   <div><p>Description: {item.description}</p><br/>
                 Price: ${item.price.$numberDecimal}
-                {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
-                {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
-                {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
-                {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-                {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-                {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.image == "" ? null : <img src={item.image}/>}<br/>
+                {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+                {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+                {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+                 handleToggleInfo(event, item)
+               }}><i class="fa-solid fa-angles-up"></i></button></div>
+
+                 : <button onClick={(event) => {
+                  handleToggleInfo(event, item)
+                }}><i class="fa-solid fa-angles-down"></i></button> }
 
 
 
@@ -501,14 +516,22 @@ const App = () => {
 
               Name: {item.itemName}<br/>
               Category: {item.category}<br/>
-              <p>Description: {item.description}</p><br/>
+              {item.soldOut ?
+
+                 <div><p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
               {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
               {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+               handleToggleInfo(event, item)
+             }}><i class="fa-solid fa-angles-up"></i></button></div>
+
+               : <button onClick={(event) => {
+                handleToggleInfo(event, item)
+              }}><i class="fa-solid fa-angles-down"></i></button> }
 
 
 
@@ -569,15 +592,22 @@ const App = () => {
 
               Name: {item.itemName}<br/>
               Category: {item.category}<br/>
-              <p>Description: {item.description}</p><br/>
+              {item.soldOut ?
+
+                 <div><p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
               {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
               {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+               handleToggleInfo(event, item)
+             }}><i class="fa-solid fa-angles-up"></i></button></div>
 
+               : <button onClick={(event) => {
+                handleToggleInfo(event, item)
+              }}><i class="fa-solid fa-angles-down"></i></button> }
 
 
               <button onClick={(event) => {
@@ -637,14 +667,22 @@ const App = () => {
 
               Name: {item.itemName}<br/>
               Category: {item.category}<br/>
-              <p>Description: {item.description}</p><br/>
+              {item.soldOut ?
+
+                 <div><p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
               {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
               {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+               handleToggleInfo(event, item)
+             }}><i class="fa-solid fa-angles-up"></i></button></div>
+
+               : <button onClick={(event) => {
+                handleToggleInfo(event, item)
+              }}><i class="fa-solid fa-angles-down"></i></button> }
 
 
 
@@ -705,14 +743,22 @@ const App = () => {
 
               Name: {item.itemName}<br/>
               Category: {item.category}<br/>
-              <p>Description: {item.description}</p><br/>
+              {item.soldOut ?
+
+                 <div><p>Description: {item.description}</p><br/>
               Price: ${item.price.$numberDecimal}
               {item.image == "" ? null : <img src={item.image}/>}<br/>
               {item.rating == 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
               {item.rating == 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
               {item.rating == 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
-              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+              {item.rating == 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null} <button onClick={(event) => {
+               handleToggleInfo(event, item)
+             }}><i class="fa-solid fa-angles-up"></i></button></div>
+
+               : <button onClick={(event) => {
+                handleToggleInfo(event, item)
+              }}><i class="fa-solid fa-angles-down"></i></button> }
 
 
 
