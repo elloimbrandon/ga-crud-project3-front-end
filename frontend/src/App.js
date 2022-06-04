@@ -31,6 +31,10 @@ const App = () => {
   const [toggleLogin, setToggleLogin] = useState(true)
 
 
+  const [searchQuery, setSearchQuery] = useState('')
+  const [showSearchResult, setShowSearchResult] = useState(false)
+
+
   const handleToggleLogin = () => {
     let token = localStorage.getItem("token")
     console.log(token);
@@ -122,6 +126,19 @@ const App = () => {
     setShowFood(false)
   }
 
+
+  const changeToSearch = (event) => {
+    event.preventDefault()
+    setShowSearchResult(true)
+    setShowHome(true)
+    setShowSports(false)
+    setShowElectronics(false)
+    setShowClothes(false)
+    setShowFood(false)
+  }
+
+
+
   const reveal = () => {
     setShow(!show)
   }
@@ -145,8 +162,11 @@ const App = () => {
   const handleNewRating = (event) => {
     setNewRating(event.target.value)
   }
+  const handleSearch = (event) => {
+    event.preventDefault()
+    setSearchQuery(event.target.value)
 
-
+  }
 
 
 
@@ -266,6 +286,10 @@ const App = () => {
 
   {toggleLogin ? <><button onClick={handleToggleLogin}>Main</button><Login /></>:
     <div className="add-item">
+    <form onSubmit={changeToSearch}>
+      <input type="text" onChange={handleSearch} />
+      <input type="submit" value="Search" />
+    </form>
     <button onClick={handleToggleLogin}>Login</button>
 
       <div className="text-box">
@@ -392,7 +416,74 @@ const App = () => {
               </>
             )
           })}
+        
+          {store.filter(item => item.itemName == searchQuery.toLowerCase()).map((item) =>
+          {
+          return (
+            <>
+              {showSearchResult ?
+              <li key={item._id} className="single-item">
 
+                Name: {item.itemName}<br/>
+                Category: {item.category}<br/>
+                <p>Description: {item.description}</p><br/>
+                Price: ${item.price.$numberDecimal}
+                {item.image === "" ? null : <img src={item.image} alt="" />}<br/>
+                {item.rating === 1 ? <div>Rating:<i className="fa-solid fa-star"></i><br/></div> : null}
+                {item.rating === 2 ? <div>Rating:<i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><br/></div> : null}
+                {item.rating === 3 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.rating === 4 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+                {item.rating === 5 ? <div>Rating:<i className="fa-solid fa-star"><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i><i className="fa-solid fa-star"></i></i><br/></div> : null}
+
+
+
+                <button onClick={(event) => {
+                  deleteItem(item)
+                }}>Delete this item!</button><br/>
+
+
+                {item.soldOut ? <form onSubmit={(event) => {
+                  updateItem(event, item)
+                }}>
+                  <div className="edit-name">Name:<input type="text" value={newItemName} onChange={handleNewItemName} required/><br/></div>
+                  <div className="edit-category">Category:
+                    <select name="category" onChange={handleNewCategory} value={newCategory} required>
+                      <option value="">category</option>
+                      <option value="sports">Sports</option>
+                      <option value="electronics">Electronics</option>
+                      <option value="clothes">Clothes</option>
+                      <option value="food">Food</option>
+                    </select><br/>
+                  </div>
+                  <div className="edit-description">Description: <input value={newDescription} type="text" onChange={handleNewDescription} required/><br/>
+                  </div>
+                  <div className="edit-price">Price: <input value={newPrice} type="text" onChange={handleNewPrice} required/><br/>
+                  </div>
+                  <div className="edit-image">Image:<input value={newImage} type="url" onChange={handleNewImage}/><br/>
+                  </div>
+                  <div className="edit-rating">Rating:
+                    <select name="rating" onChange={handleNewRating} value={newRating} required>
+                      <option value=''>Select rating</option>
+                      <option value='1'>1</option>
+                      <option value='2'>2</option>
+                      <option value='3'>3</option>
+                      <option value='4'>4</option>
+                      <option value='5'>5</option>
+                    </select><br/>
+                  </div>
+
+                  <div className="edit-submit"><input type="submit" value="Edit Item"/>
+                  </div>
+                  <button onClick={(event) => {
+                    handleSoldOut(event, item)
+                  }}>Cancel Edit!</button>
+                </form> : <button onClick={(event) => {
+                  handleSoldOut(event, item)
+                }}>Edit Item</button>}
+              </li> : null }
+            </>
+              )
+            })}
 
         {store.filter(item => item.category == "sports").map((item) =>
         {
