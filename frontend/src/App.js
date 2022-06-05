@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import {useState, useEffect} from 'react'
 import axios from 'axios'
@@ -46,7 +46,7 @@ const App = () => {
   const handleCart = () => {
     let token = localStorage.getItem("token")
     if (token) {
-      axios.get('http://localhost:3000/users/me').then((response) => {
+      axios.get('https://project-3-backend-ga.herokuapp.com/users/me').then((response) => {
         console.log(response.data);
         setCart(response.data)
       })

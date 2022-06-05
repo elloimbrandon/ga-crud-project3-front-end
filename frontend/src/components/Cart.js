@@ -26,7 +26,7 @@ const Cart = ({item, Email}) => {
     e.preventDefault();
     // SetId(e.target.value);
     console.log(e.target.value);
-    const url = "http://localhost:3000/users/me/addtocart";
+    const url = "https://project-3-backend-ga.herokuapp.com/users/me/addtocart";
     axios
       .post(url, {
         email: Email,
