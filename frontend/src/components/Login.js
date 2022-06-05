@@ -10,6 +10,13 @@ const Login = ({Email, userEmail}) => {
   const [login, setLogin] = useState(false)
   const [hidden, setHidden] = useState(false)
 
+  const [show, setShow] = useState(true)
+
+  const reveal = () => {
+    setShow(!show)
+  }
+
+
   const handleLogin = () => {
     let token = localStorage.getItem("token")
     console.log(token);
@@ -83,7 +90,9 @@ const Login = ({Email, userEmail}) => {
     {login ? <div>Welcome!! {userEmail}<br/><button onClick={handleLogin}>Back to Sign in!</button><br/>
 
     </div> :
-      <div><section>
+      <div>
+
+      <section>
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">email:</label>
@@ -123,7 +132,9 @@ const Login = ({Email, userEmail}) => {
           <button>Sign up!</button>
         </form>
       </section>
+
       <section>
+        <h1>Sign in</h1>
         <form onSubmit={handleSignIn}>
           <label htmlFor="Email">Email:</label>
           <input

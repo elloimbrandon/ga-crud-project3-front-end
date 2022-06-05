@@ -311,6 +311,13 @@ const App = () => {
 
   {toggleLogin ? <>
     <button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/>
+  </>:
+    <div className="add-item">
+    <form onSubmit={changeToSearch}>
+      <input type="text" onChange={handleSearch} />
+      <input type="submit" value="Search" />
+    </form>
+    <button onClick={handleToggleLogin}>Logout Page</button>
     <button onClick={handleCart}>Cart!</button>
     {cart.filter(inventory => inventory.email == email.toLowerCase() ).map((inventory) => {
       return(
@@ -322,14 +329,6 @@ const App = () => {
         </>
       )
     })}
-  </>:
-    <div className="add-item">
-    <form onSubmit={changeToSearch}>
-      <input type="text" onChange={handleSearch} />
-      <input type="submit" value="Search" />
-    </form>
-    <button onClick={handleToggleLogin}>Logout</button>
-
       <div className="text-box">
         <p>Add</p>
         <div className="text-box-text">
