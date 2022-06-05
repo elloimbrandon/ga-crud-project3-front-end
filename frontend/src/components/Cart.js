@@ -61,10 +61,10 @@ const Cart = ({item, Email}) => {
     <>
       <ul>
         <li>
-          <button value={item._id} onClick={addToCart}>
+          <button value={item.itemName} onClick={addToCart}>
             Add to cart
           </button>
-          
+
         </li>
       </ul>
     </>

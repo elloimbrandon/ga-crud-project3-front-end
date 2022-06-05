@@ -43,7 +43,17 @@ const App = () => {
 
   const [cart, setCart] = useState([])
 
-
+  const handleCart = () => {
+    let token = localStorage.getItem("token")
+    if (token) {
+      axios.get('http://localhost:3000/users/me').then((response) => {
+        console.log(response.data);
+        setCart(response.data)
+      })
+    } else if (token = null){
+      alert('please log in!')
+    }
+  }
 
 
 
@@ -177,7 +187,10 @@ const App = () => {
   const handleSearch = (event) => {
     event.preventDefault()
     setSearchQuery(event.target.value)
-
+  }
+  const handleEmail = (event) => {
+    event.preventDefault()
+    setEmail(event.target.value)
   }
 
 
@@ -298,7 +311,17 @@ const App = () => {
 
   {toggleLogin ? <>
     <button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/>
-    
+    <button onClick={handleCart}>Cart!</button>
+    {cart.filter(inventory => inventory.email == email.toLowerCase() ).map((inventory) => {
+      return(
+        <>
+          <ul>
+            <hr/>
+            <li>{inventory.cart}</li><br/>
+          </ul>
+        </>
+      )
+    })}
   </>:
     <div className="add-item">
     <form onSubmit={changeToSearch}>
