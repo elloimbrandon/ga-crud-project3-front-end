@@ -72,7 +72,7 @@ const App = () => {
 
   const handleSoldOut = (event, storeData) => {
     event.preventDefault()
-    axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
+    axios.put(`https://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
       itemName:storeData.itemName,
       category:storeData.category,
       description:storeData.description,
@@ -81,7 +81,7 @@ const App = () => {
       rating:storeData.rating,
       soldOut:!storeData.soldOut
     }).then(() => {
-      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+      axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
       })
     })
@@ -89,7 +89,7 @@ const App = () => {
 
   const handleToggleInfo = (event, storeData) => {
     event.preventDefault()
-    axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
+    axios.put(`https://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
       itemName:storeData.itemName,
       category:storeData.category,
       description:storeData.description,
@@ -98,7 +98,7 @@ const App = () => {
       rating:storeData.rating,
       soldOut:!storeData.soldOut
     }).then(() => {
-      axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+      axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
       })
     })
@@ -197,7 +197,7 @@ const App = () => {
 
   const newItemSubmit = (event) => {
     event.preventDefault()
-    axios.post(`http://project-3-backend-ga.herokuapp.com/store`, {
+    axios.post(`https://project-3-backend-ga.herokuapp.com/store`, {
       itemName:newItemName,
       category:newCategory,
       description:newDescription,
@@ -223,7 +223,7 @@ const App = () => {
 
 
   useEffect(() => {
-    axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+    axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
         setStore(response.data)
     })
   }, [])
@@ -233,8 +233,8 @@ const App = () => {
     let token = localStorage.getItem("token")
     // console.log(token);
     if (token) {
-      axios.delete(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
-        axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+      axios.delete(`https://project-3-backend-ga.herokuapp.com/store/${storeData._id}`).then(() => {
+        axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
           setStore(response.data)
         })
       })
@@ -250,7 +250,7 @@ const App = () => {
     event.preventDefault()
     let token = localStorage.getItem("token")
     if (token) {
-      axios.put(`http://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
+      axios.put(`https://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
         itemName:newItemName,
         category:newCategory,
         description:newDescription,
@@ -259,7 +259,7 @@ const App = () => {
         rating:newRating,
         soldOut:false
       }).then(() => {
-        axios.get('http://project-3-backend-ga.herokuapp.com/store').then((response) => {
+        axios.get('https://project-3-backend-ga.herokuapp.com/store').then((response) => {
           setStore(response.data)
           // console.log(response.data);
         })
