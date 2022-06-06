@@ -322,9 +322,12 @@ const App = () => {
     {cart.filter(inventory => inventory.email == email.toLowerCase() ).map((inventory) => {
       return(
         <>
-          <ul>
+          <ul className="cart-container">
             <hr/>
-            <li>{inventory.cart}</li><br/>
+            <li className="cart-item">
+              Cart: {inventory.cart} <br/>
+            </li>
+
           </ul>
         </>
       )
