@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import axios from "axios";
 
 const Login = ({Email, userEmail}) => {
-  const userRef = useRef();
+  // const userRef = useRef();
 
   const [user, setUser] = useState("");
   // const [userEmail, setuserEmail] = useState("");
@@ -49,8 +49,8 @@ const Login = ({Email, userEmail}) => {
   // prevents the page from reloading
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user, pwd);
-    axios.post(`http://localhost:3000/users/register`, {
+    // console.log(user, pwd);
+    axios.post(`https://project-3-backend-ga.herokuapp.com/users/register`, {
       name: user,
       email: userEmail,
       password: pwd,
@@ -59,7 +59,7 @@ const Login = ({Email, userEmail}) => {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-    const url = "http://localhost:3000/users/login";
+    const url = "https://project-3-backend-ga.herokuapp.com/users/login";
     axios
       .post(url, {
         email: userEmail,
@@ -67,7 +67,7 @@ const Login = ({Email, userEmail}) => {
       })
       .then((response) => {
         var token = localStorage.setItem("token", response.data.token);
-        console.log(`logged in with ` + localStorage.getItem("token", token));
+        // console.log(`logged in with ` + localStorage.getItem("token", token));
 
       });
 
