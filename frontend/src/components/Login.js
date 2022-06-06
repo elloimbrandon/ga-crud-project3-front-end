@@ -49,7 +49,7 @@ const Login = ({Email, userEmail}) => {
   // prevents the page from reloading
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(user, pwd);
+    // console.log(user, pwd);
     axios.post(`https://project-3-backend-ga.herokuapp.com/users/register`, {
       name: user,
       email: userEmail,
@@ -67,7 +67,7 @@ const Login = ({Email, userEmail}) => {
       })
       .then((response) => {
         var token = localStorage.setItem("token", response.data.token);
-        console.log(`logged in with ` + localStorage.getItem("token", token));
+        // console.log(`logged in with ` + localStorage.getItem("token", token));
 
       });
 
