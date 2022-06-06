@@ -198,7 +198,6 @@ const App = () => {
   const newItemSubmit = (event) => {
     event.preventDefault()
     axios.post(`https://project-3-backend-ga.herokuapp.com/store`, {
-      itemName:newItemName,
       category:newCategory,
       description:newDescription,
       price:newPrice,
@@ -251,7 +250,7 @@ const App = () => {
     let token = localStorage.getItem("token")
     if (token) {
       axios.put(`https://project-3-backend-ga.herokuapp.com/store/${storeData._id}`, {
-        itemName:newItemName,
+        itemName:newItemName.toLowerCase(),
         category:newCategory,
         description:newDescription,
         price:newPrice,
@@ -310,7 +309,7 @@ const App = () => {
     </div>
 
   {toggleLogin ? <>
-    <button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/>
+    <div className="login"><button onClick={handleToggleLogin}>Main</button><Login Email={setEmail} userEmail={email}/></div>
   </>:
     <div className="add-item">
     <form onSubmit={changeToSearch}>
@@ -325,7 +324,7 @@ const App = () => {
           <ul className="cart-container">
             <hr/>
             <li className="cart-item">
-              Cart: {inventory.cart} <br/>
+              <h1 className="cart-h1">Cart:</h1> <div className="inventory-cart">{inventory.cart} <br/></div>
             </li>
 
           </ul>
