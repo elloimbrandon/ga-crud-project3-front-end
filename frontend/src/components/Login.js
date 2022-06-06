@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "axios";
+import '../App.css';
 
 const Login = ({Email, userEmail}) => {
   // const userRef = useRef();
@@ -49,7 +50,7 @@ const Login = ({Email, userEmail}) => {
   // prevents the page from reloading
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(user, pwd);
+    console.log(user, pwd);
     axios.post(`https://project-3-backend-ga.herokuapp.com/users/register`, {
       name: user,
       email: userEmail,
@@ -67,7 +68,7 @@ const Login = ({Email, userEmail}) => {
       })
       .then((response) => {
         var token = localStorage.setItem("token", response.data.token);
-        // console.log(`logged in with ` + localStorage.getItem("token", token));
+        console.log(`logged in with ` + localStorage.getItem("token", token));
 
       });
 
@@ -90,9 +91,9 @@ const Login = ({Email, userEmail}) => {
     {login ? <div>Welcome!! {userEmail}<br/><button onClick={handleLogin}>Back to Sign in!</button><br/>
 
     </div> :
-      <div>
+      <div className="login-container">
 
-      <section>
+      <section className="sign-up">
         <h1>Sign up</h1>
         <form onSubmit={handleSubmit}>
           <label htmlFor="email">email:</label>
@@ -133,7 +134,7 @@ const Login = ({Email, userEmail}) => {
         </form>
       </section>
 
-      <section>
+      <section className="sign-in">
         <h1>Sign in</h1>
         <form onSubmit={handleSignIn}>
           <label htmlFor="Email">Email:</label>
